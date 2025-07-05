@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# vim: ft=bash
+dir=$(find ~/personal ~/repos ~/opensource -maxdepth 3 -type d | fzf --tmux)
+if [ -z "${dir}" ]; then
+  exit 0
+fi
+name=$(basename "$dir")
+if ! tmux has-session -t $name 2>/dev/null; then
+  tmux new-session -s $name -d -c $dir
+  tmux send-keys -t $name 'nvim .' C-m
+fi
+tmux switch -t $name

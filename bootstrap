@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+set -e
+
+function linking() {
+  ln -sfn $(pwd)/.zshrc ~/.zshrc
+  ln -sfn $(pwd)/.zshenv ~/.zshenv
+  ln -sfn $(pwd)/.tmux.conf ~/.tmux.conf
+  ln -sfn $(pwd)/.psqlrc ~/.psqlrc
+  ln -sfn $(pwd)/.vimrc ~/.vimrc
+  ln -sfn $(pwd)/.ideavimrc ~/.ideavimrc
+
+  mkdir -p ${XDG_DATA_HOME:=~/.local/share}
+  mkdir -p ${XDG_CONFIG_HOME:=~/.config}
+  ln -sfn $(pwd)/alacritty $XDG_CONFIG_HOME/alacritty
+  ln -sfn $(pwd)/nvim $XDG_CONFIG_HOME/nvim
+
+  ln -sfn $(pwd)/.gitignore ~/.gitignore
+  git config --global core.excludesFile '~/.gitignore'
+
+  mkdir -p ~/.local/bin
+  mkdir -p ~/personal
+  mkdir -p ~/repos
+  mkdir -p ~/opensource
+  touch ~/.profile
+}
+echo '[-] linking dotfiles [-]'
+linking
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  if ! xcode-select -p &> /dev/null; then
+    echo '[-] installing xcode command line tools [-]'
+    xcode-select --install
+  fi
+  if ! hash brew &> /dev/null; then
+    echo '[-] installing homebrew [-]'
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> ~/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
+
+  echo '[-] installing essential packages [-]'
+  brew update
+  brew install curl wget git coreutils watch ncdu cmake ninja tree
+  brew install parallel tmux fzf ripgrep jq golang htop pdfgrep hyperfine procs
+  brew install alacritty maccy universal-ctags font-hack-nerd-font
+else
+  echo '[-] checking secure boot state [-]'
+  if [[ "$(mokutil --sb-state)" != *"SecureBoot enabled"* ]]; then
+    echo "could not determine the secure boot state."
+    exit 1
+  fi
+
+  echo '[-] installing essential packages [-]'
+  sudo dnf upgrade -y
+  sudo dnf install -y curl wget zip zsh git coreutils gcc clang cmake make ninja-build
+  sudo dnf install -y alacritty watch ncdu autoconf automake parallel make pkg-config flex bison check meson
+  sudo dnf install -y tree vim tmux fzf ripgrep jq xclip htop redshift gnupg2 pdfgrep hyperfine procs
+
+  ln -sfn $(pwd)/.Xresources ~/.Xresources
+  if lspci | grep -E "VGA|3D" | grep -iq "AMD"; then
+    echo '[-] enabling rpm fusion repositories [-]'
+    sudo dnf install -y \
+      https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+    sudo dnf install -y \
+      https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    ln -sfn $(pwd)/MangoHud $XDG_CONFIG_HOME/MangoHud
+    echo '[-] installing steam essential packages [-]'
+    sudo dnf install -y steam rocm-smi mangohud gamescope
+    echo 'remember to add `mangohud %command%` to steam launch options'
+  fi
+
+  target_dir=$XDG_DATA_HOME/fonts
+  if [ ! -d "$target_dir" ] ; then
+    echo '[-] installing favourite font [-]'
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+    mkdir -p $target_dir
+    unzip Hack.zip -d $target_dir
+    rm -f Hack.zip
+    fc-cache -f -v
+  fi
+
+  target_dir=~/opensource/elementary-xfce
+  if [ ! -d "$target_dir" ] ; then
+    echo '[-] building elementary icons for xfce [-]'
+    sudo dnf install -y gcc gdk-pixbuf2-devel gtk-update-icon-cache make optipng pkgconf rsvg-pixbuf-loader
+    git clone https://github.com/shimmerproject/elementary-xfce $target_dir
+    cd $target_dir
+    ./configure
+    make
+    sudo make install
+    sudo make icon-caches
+  fi
+
+  target_dir=~/opensource/ibus-bamboo
+  if [ ! -d "$target_dir" ] ; then
+    echo '[-] building ibus-bamboo [-]'
+    sudo dnf install -y ibus make go libX11-devel libXtst-devel gtk3-devel
+    git clone https://github.com/BambooEngine/ibus-bamboo.git $target_dir
+    cd $target_dir
+    sudo make install PREFIX=/usr
+  fi
+fi
+
+echo '[-] downloading git-prompt.sh script [-]'
+mkdir -p ~/.zsh/plugins/git/
+curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
+  -o ~/.zsh/plugins/git/git-prompt.sh
+
+target_dir=~/.zsh/zsh-autosuggestions
+if [ ! -d "$target_dir" ] ; then
+  echo '[-] cloning zsh-autosuggestions [-]'
+  git clone https://github.com/zsh-users/zsh-autosuggestions $target_dir
+fi
+
+echo '[-] downloading vim-plug [-]'
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+target_dir=~/opensource/neovim
+if [ ! -d "$target_dir" ] ; then
+  echo '[-] building neovim [-]'
+  git clone https://github.com/neovim/neovim.git $target_dir
+  cd $target_dir
+  # git checkout nightly
+  make CMAKE_BUILD_TYPE=RelWithDebInfo
+  sudo make install
+fi
+
+current_shell=$(echo $SHELL)
+if [ "$current_shell" != '/usr/bin/zsh' ] && [ "$current_shell" != '/bin/zsh' ]; then
+  echo '[-] change default shell to zsh [-]'
+  chsh -s $(which zsh)
+  echo '[-] device ready, restart your computer. [-]'
+else
+  echo '[-] device ready. [-]'
+fi
+
+# vim: ft=bash

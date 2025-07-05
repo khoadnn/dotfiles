@@ -1,0 +1,7 @@
+Host gitlab.com
+  HostName gitlab.com
+  User [username]
+  AddKeysToAgent yes
+  PubkeyAcceptedKeyTypes ssh-ed25519
+  IdentityFile ~/.ssh/id_ed25519
+  IdentitiesOnly yes

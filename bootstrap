@@ -20,7 +20,6 @@ function linking() {
   mkdir -p ~/.local/bin
   mkdir -p ~/personal
   mkdir -p ~/repos
-  mkdir -p ~/opensource
   touch ~/.profile
 }
 echo '[-] linking dotfiles [-]'
@@ -41,8 +40,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   echo '[-] installing essential packages [-]'
   brew update
   brew install curl wget git coreutils watch ncdu cmake ninja tree
-  brew install parallel tmux fzf ripgrep jq golang htop pdfgrep hyperfine procs
-  brew install alacritty maccy universal-ctags font-hack-nerd-font
+  brew install alacritty parallel tmux fzf ripgrep jq universal-ctags maccy font-hack
 else
   echo '[-] checking secure boot state [-]'
   if [[ "$(mokutil --sb-state)" != *"SecureBoot enabled"* ]]; then
@@ -52,17 +50,14 @@ else
 
   echo '[-] installing essential packages [-]'
   sudo dnf upgrade -y
-  sudo dnf install -y curl wget zip zsh git coreutils gcc clang cmake make ninja-build
-  sudo dnf install -y alacritty watch ncdu autoconf automake parallel make pkg-config flex bison check meson
-  sudo dnf install -y tree vim tmux fzf ripgrep jq xclip htop redshift gnupg2 pdfgrep hyperfine procs
+  sudo dnf install -y curl wget zip zsh git coreutils gcc clang cmake make ninja-build ncdu
+  sudo dnf install -y alacritty parallel watch tree vim tmux fzf ripgrep jq xclip redshift
 
   ln -sfn $(pwd)/.Xresources ~/.Xresources
   if lspci | grep -E "VGA|3D" | grep -iq "AMD"; then
     echo '[-] enabling rpm fusion repositories [-]'
-    sudo dnf install -y \
-      https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-    sudo dnf install -y \
-      https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    sudo dnf install -y https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+    sudo dnf install -y https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
     ln -sfn $(pwd)/MangoHud $XDG_CONFIG_HOME/MangoHud
     echo '[-] installing steam essential packages [-]'
     sudo dnf install -y steam rocm-smi mangohud gamescope
@@ -72,14 +67,14 @@ else
   target_dir=$XDG_DATA_HOME/fonts
   if [ ! -d "$target_dir" ] ; then
     echo '[-] installing favourite font [-]'
-    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Hack.zip
+    wget https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip
     mkdir -p $target_dir
-    unzip Hack.zip -d $target_dir
-    rm -f Hack.zip
+    unzip Hack-v3.003-ttf.zip -d $target_dir
+    rm -f Hack-v3.003-ttf.zip
     fc-cache -f -v
   fi
 
-  target_dir=~/opensource/elementary-xfce
+  target_dir=$XDG_DATA_HOME/elementary-xfce
   if [ ! -d "$target_dir" ] ; then
     echo '[-] building elementary icons for xfce [-]'
     sudo dnf install -y gcc gdk-pixbuf2-devel gtk-update-icon-cache make optipng pkgconf rsvg-pixbuf-loader
@@ -91,7 +86,7 @@ else
     sudo make icon-caches
   fi
 
-  target_dir=~/opensource/ibus-bamboo
+  target_dir=$XDG_DATA_HOME/ibus-bamboo
   if [ ! -d "$target_dir" ] ; then
     echo '[-] building ibus-bamboo [-]'
     sudo dnf install -y ibus make go libX11-devel libXtst-devel gtk3-devel
@@ -113,15 +108,15 @@ if [ ! -d "$target_dir" ] ; then
 fi
 
 echo '[-] downloading vim-plug [-]'
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-target_dir=~/opensource/neovim
+target_dir=$XDG_DATA_HOME/neovim
 if [ ! -d "$target_dir" ] ; then
   echo '[-] building neovim [-]'
   git clone https://github.com/neovim/neovim.git $target_dir
   cd $target_dir
-  # git checkout nightly
+  git checkout nightly
   make CMAKE_BUILD_TYPE=RelWithDebInfo
   sudo make install
 fi

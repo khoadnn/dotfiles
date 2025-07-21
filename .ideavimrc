@@ -1,28 +1,24 @@
-" .ideavimrc is a configuration file for ideavim plugin.
+" .ideavimrc is a configuration file for IdeaVim plugin.
 " you can find a list of commands here: https://jb.gg/h38q75
 " find more examples here: https://jb.gg/share-ideavimrc
 source ~/.vimrc
-set cursorline
-set scrolloff=2
-" dismiss highlights
-nnoremap <silent> <Esc> :noh<CR>
 " find and replace
 nnoremap <Space>r viw"0y:%s/<C-r>0//gI<Left><Left><Left>
 vnoremap <Space>r "0y:%s/<C-r>0//gI<Left><Left><Left>
-" search current marked text in intellij only
+" search current marked text in IntelliJ only
 vnoremap // "0y/\V<C-r>0<CR>
-" enable ideavim plugins https://jb.gg/ideavim-plugins
+" enable IdeaVim plugins https://jb.gg/ideavim-plugins
 set highlightedyank
-set commentary
 set surround
+set commentary
 " ide specific options
 set ideastatusicon=gray
 set ideawrite=file
 set visualdelay=50
 set ideajoin
 set ideamarks
-" map ide Actions to ideavim -- https://jb.gg/abva4t
-" find files and grep
+" map IDE Actions to IdeaVim -- https://jb.gg/abva4t
+" find files and grep patterns
 nmap <Space>f <Action>(GotoFile)
 nmap <Space>F viw:action GotoFile<CR>
 nmap <Space>e <Action>(ShowNavBar)
@@ -31,7 +27,7 @@ nmap <Space>g <Action>(FindInPath)
 nmap <Space>G viw:action FindInPath<CR>
 vmap <Space>g <Action>(FindInPath)
 nmap <Space>/ <Action>(SearchEverywhere)
-" language actions
+" intellisense actions
 nmap gq <Action>(ReformatCode)
 vmap gq <Action>(ReformatCode)
 nmap <C-]> <Action>(GotoDeclaration)
@@ -40,10 +36,10 @@ nmap gi <Action>(GotoImplementation)
 nmap gr <Action>(FindUsages)
 nmap ga <Action>(GotoAction)
 nmap K <Action>(ShowHoverInfo)
-" ide actions
+" IDE actions
 nmap gx <Action>(RunClass)
 nmap gX <Action>(RunMenu)
 nmap - <Action>(SelectInProjectView)
-nmap <C-j> <Action>(GotoNextError)zz
-nmap <C-k> <Action>(GotoPreviousError)zz
+nmap <C-n> <Action>(GotoNextError)zz
+nmap <C-p> <Action>(GotoPreviousError)zz
 nmap <C-w>o <Action>(HideAllWindows)

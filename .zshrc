@@ -25,10 +25,8 @@ GIT_PS1_COMPRESSSPARSESTATE=true
 # enable command-subsitution in ps1
 setopt PROMPT_SUBST
 NL=$'\n'
-PS1='$NL%B%F{cyan}%0~%f%b% %F{magenta}$(__git_ps1 "  %s")%f$NL%B%(?.%F{green}.%F{red})%(!.#.$)%f%b '
+PS1='$NL%B%F{magenta}%0~%f%b% %F{blue}$(__git_ps1 " [%s]") %f%B%(?.%F{green}.%F{red})%(!.#.$)%f%b '
 # activate autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-# nvim as vim local
-alias vim=nvim
 # source .profile
 source $HOME/.profile

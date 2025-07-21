@@ -11,8 +11,8 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 # default editor
-export EDITOR='nvim'
-export VISUAL='nvim'
+export EDITOR='vim'
+export VISUAL='vim'
 # zsh history
 HISTFILE=$HOME/.zhistory
 SAVEHIST=10000
@@ -21,6 +21,7 @@ HISTSIZE=10000
 export TERM=tmux-256color
 export COLORTERM=truecolor
 # fzf options
+export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!.git'"
 export FZF_DEFAULT_OPTS='
 --color=fg:#908caa,bg:-1,hl:#ebbcba
 --color=fg+:#e0def4,bg+:-1,hl+:#ebbcba

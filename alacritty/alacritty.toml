@@ -3,21 +3,21 @@ opacity = 1
 padding.x = 5
 padding.y = 5
 decorations = "Full"
-decorations_theme_variant = "Dark"
+decorations_theme_variant = "None"
 startup_mode = "Maximized"
 dynamic_title = true
 option_as_alt = "Both"
 
 [font]
-normal.family = "Hack Nerd Font"
+normal.family = "Hack"
 normal.style = "Regular"
-bold.family = "Hack Nerd Font"
+bold.family = "Hack"
 bold.style = "Bold"
-italic.family = "Hack Nerd Font"
+italic.family = "Hack"
 italic.style = "Italic"
-bold_italic.family = "Hack Nerd Font"
+bold_italic.family = "Hack"
 bold_italic.style = "Bold Italic"
-size = 18
+size = 16
 
 [selection]
 save_to_clipboard = true
@@ -38,7 +38,7 @@ mods = "Alt"
 chars = "\u001BF"
 
 [colors.primary]
-background = "#000000"
+background = "#181818"
 foreground = "#ffffff"
 
 [colors.cursor]

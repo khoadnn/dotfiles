@@ -1,0 +1,98 @@
+[window]
+opacity = 1
+padding.x = 5
+padding.y = 5
+decorations = "Full"
+decorations_theme_variant = "None"
+startup_mode = "Maximized"
+dynamic_title = true
+option_as_alt = "Both"
+
+[font]
+normal.family = "Hack"
+normal.style = "Regular"
+bold.family = "Hack"
+bold.style = "Bold"
+italic.family = "Hack"
+italic.style = "Italic"
+bold_italic.family = "Hack"
+bold_italic.style = "Bold Italic"
+size = 16
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style.shape = "Block"
+style.blinking = "Always"
+blink_interval = 500
+
+[[keyboard.bindings]]
+key = "Left"
+mods = "Alt"
+chars = "\u001BB"
+
+[[keyboard.bindings]]
+key = "Right"
+mods = "Alt"
+chars = "\u001BF"
+
+[colors.primary]
+background = "#181818"
+foreground = "#ffffff"
+
+[colors.cursor]
+text = "#e0def4"
+cursor = "#56526e"
+
+[colors.vi_mode_cursor]
+text = "#e0def4"
+cursor = "#56526e"
+
+[colors.search.matches]
+foreground = "#908caa"
+background = "#393552"
+
+[colors.search.focused_match]
+foreground = "#232136"
+background = "#ea9a97"
+
+[colors.hints.start]
+foreground = "#908caa"
+background = "#2a273f"
+
+[colors.hints.end]
+foreground = "#6e6a86"
+background = "#2a273f"
+
+[colors.line_indicator]
+foreground = "None"
+background = "None"
+
+[colors.footer_bar]
+foreground = "#e0def4"
+background = "#2a273f"
+
+[colors.selection]
+text = "#e0def4"
+background = "#44415a"
+
+[colors.normal]
+black = "#393552"
+red = "#eb6f92"
+green = "#3e8fb0"
+yellow = "#f6c177"
+blue = "#9ccfd8"
+magenta = "#c4a7e7"
+cyan = "#ea9a97"
+white = "#e0def4"
+
+[colors.bright]
+black = "#6e6a86"
+red = "#eb6f92"
+green = "#3e8fb0"
+yellow = "#f6c177"
+blue = "#9ccfd8"
+magenta = "#c4a7e7"
+cyan = "#ea9a97"
+white = "#e0def4"

@@ -20,7 +20,6 @@ set visualbell
 set ignorecase
 set smartcase
 set background=dark
-colorscheme lunaperche
 set autoread
 set autoindent
 set incsearch
@@ -47,12 +46,17 @@ nnoremap <silent> <Space><Space> :noh<CR>
 call plug#begin()
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+Plug 'rose-pine/vim', { 'as': 'rose-pine' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-signify'
 Plug 'machakann/vim-highlightedyank'
 Plug 'ziglang/zig.vim'
 call plug#end()
+
+" colors
+set termguicolors
+silent! colorscheme rosepine_moon
 
 " generate ctags in the background
 function! GenerateTags()

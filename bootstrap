@@ -8,11 +8,14 @@ function linking() {
   ln -sfn $(pwd)/.psqlrc ~/.psqlrc
   ln -sfn $(pwd)/.vimrc ~/.vimrc
   ln -sfn $(pwd)/.ideavimrc ~/.ideavimrc
-  ln -sfn $(pwd)/.gitignore ~/.gitignore
-  git config --global core.excludesFile '~/.gitignore'
 
   mkdir -p ${XDG_DATA_HOME:=~/.local/share}
   mkdir -p ${XDG_CONFIG_HOME:=~/.config}
+  ln -sfn $(pwd)/alacritty $XDG_CONFIG_HOME/alacritty
+
+  ln -sfn $(pwd)/.gitignore ~/.gitignore
+  git config --global core.excludesFile '~/.gitignore'
+
   mkdir -p ~/.local/bin
   mkdir -p ~/personal
   mkdir -p ~/repos
@@ -36,8 +39,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   echo '[-] installing essential packages [-]'
   brew update
-  brew install curl wget git coreutils watch ncdu cmake ninja parallel
-  brew install zig tmux fzf ripgrep jq tree universal-ctags font-hack
+  brew install curl wget git coreutils watch ncdu cmake ninja parallel tree
+  brew install zig alacritty tmux fzf ripgrep jq universal-ctags font-hack
 else
   echo '[-] checking secure boot state [-]'
   if [[ "$(mokutil --sb-state)" != *"SecureBoot enabled"* ]]; then
@@ -56,8 +59,8 @@ else
 
   echo '[-] installing essential packages [-]'
   sudo apt-get update -y && sudo apt-get upgrade -y
-  sudo apt-get install -y curl wget zip zsh git coreutils gcc clang clangd cmake make ninja-build ca-certificates
-  sudo apt-get install -y watch ncdu parallel tree vim vim-gtk3 tmux fzf ripgrep jq universal-ctags wl-clipboard
+  sudo apt-get install -y curl wget zip zsh git coreutils gcc clang clangd cmake make ninja-build tree ca-certificates
+  sudo apt-get install -y alacritty parallel watch ncdu vim vim-gtk3 tmux fzf ripgrep jq universal-ctags wl-clipboard
 
   if lspci | grep -E "VGA|3D" | grep -iq "AMD"; then
     echo '[-] installing amd essential packages [-]'

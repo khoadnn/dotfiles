@@ -66,6 +66,18 @@ else
     echo 'be sure to cp mangohud config to `.config/MangoHud` directory inside steam flatpak'
   fi
 
+  echo '[-] configuring gnome workspace shortcuts [-]'
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Super><Shift>1']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Super><Shift>2']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Super><Shift>3']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Super><Shift>4']"
+  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Super><Shift>5']"
+
   if [ ! -f '/etc/apt/sources.list.d/mozilla.list' ]; then
     echo '[-] installing latest firefox [-]'
     sudo apt-get purge --autoremove -y firefox-esr
@@ -82,6 +94,19 @@ else
     sudo apt-get update -y && sudo apt-get install -y firefox
   fi
 
+  echo '[-] downloading zig executable [-]'
+  curl -s https://ziglang.org/download/index.json \
+    | jq -r 'to_entries | map(select(.key != "master")) | max_by(.key | split(".") | map(tonumber)) | .value["x86_64-linux"].tarball' \
+    | xargs wget
+  tar -xvf zig-x86_64-linux-*.tar.xz
+  sudo mv zig-x86_64-linux-*/zig /usr/bin/zig
+  if [ -d '/usr/lib/zig' ] ; then
+    sudo rm -rf /usr/lib/zig
+  fi
+  sudo mkdir -p /usr/lib/zig
+  sudo mv zig-x86_64-linux*/lib/* /usr/lib/zig/
+  rm -rf zig-x86_64-linux-*
+
   target_dir=$XDG_DATA_HOME/ibus-bamboo
   if [ ! -d "$target_dir" ] ; then
     echo '[-] building ibus-bamboo [-]'
@@ -93,17 +118,6 @@ else
       gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('ibus', 'Bamboo')]"
   fi
 
-  echo '[-] configuring gnome workspace shortcuts [-]'
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
-  gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
-  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Super><Shift>1']"
-  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Super><Shift>2']"
-  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Super><Shift>3']"
-  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Super><Shift>4']"
-  gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Super><Shift>5']"
 fi
 
 echo '[-] downloading git-prompt.sh script [-]'
@@ -116,6 +130,10 @@ if [ ! -d "$target_dir" ] ; then
   echo '[-] cloning zsh-autosuggestions [-]'
   git clone https://github.com/zsh-users/zsh-autosuggestions $target_dir
 fi
+
+echo '[-] downloading vim-plug script [-]'
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 current_shell=$(echo $SHELL)
 if [ "$current_shell" != '/usr/bin/zsh' ] && [ "$current_shell" != '/bin/zsh' ]; then

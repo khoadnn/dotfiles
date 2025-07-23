@@ -17,7 +17,7 @@ italic.family = "Hack"
 italic.style = "Italic"
 bold_italic.family = "Hack"
 bold_italic.style = "Bold Italic"
-size = 16
+size = 15
 
 [selection]
 save_to_clipboard = true
@@ -26,16 +26,6 @@ save_to_clipboard = true
 style.shape = "Block"
 style.blinking = "Always"
 blink_interval = 500
-
-[[keyboard.bindings]]
-key = "Left"
-mods = "Alt"
-chars = "\u001BB"
-
-[[keyboard.bindings]]
-key = "Right"
-mods = "Alt"
-chars = "\u001BF"
 
 [colors.primary]
 background = "#181818"

@@ -8,6 +8,10 @@ setopt SHARE_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt EXTENDED_HISTORY
 setopt NO_BEEP
+# use emacs keybinding for shell
+bindkey -e
+bindkey '\e[1;5D' backward-word
+bindkey '\e[1;5C' forward-word
 # autocompletion (based on history)
 bindkey '\e[A' history-beginning-search-backward
 bindkey '\e[B' history-beginning-search-forward

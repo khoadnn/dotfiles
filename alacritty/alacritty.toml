@@ -22,6 +22,21 @@ size = 15
 [selection]
 save_to_clipboard = true
 
+[[keyboard.bindings]]
+key = "Left"
+mods = "Control"
+chars = "\u001b[1;5D"
+
+[[keyboard.bindings]]
+key = "Right"
+mods = "Control"
+chars = "\u001b[1;5C"
+
+[[keyboard.bindings]]
+key = "Back"
+mods = "Control"
+chars = "\u0017"
+
 [cursor]
 style.shape = "Block"
 style.blinking = "Always"

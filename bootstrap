@@ -12,6 +12,7 @@ function linking() {
   mkdir -p ${XDG_DATA_HOME:=~/.local/share}
   mkdir -p ${XDG_CONFIG_HOME:=~/.config}
   ln -sfn $(pwd)/alacritty $XDG_CONFIG_HOME/alacritty
+  ln -sfn $(pwd)/nvim $XDG_CONFIG_HOME/nvim
 
   ln -sfn $(pwd)/.gitignore ~/.gitignore
   git config --global core.excludesFile '~/.gitignore'
@@ -60,7 +61,7 @@ else
   echo '[-] installing essential packages [-]'
   sudo apt-get update -y && sudo apt-get upgrade -y
   sudo apt-get install -y curl wget zip zsh git coreutils gcc clang clangd cmake make ninja-build tree ca-certificates
-  sudo apt-get install -y alacritty parallel watch ncdu vim vim-gtk3 tmux fzf ripgrep jq universal-ctags wl-clipboard
+  sudo apt-get install -y alacritty parallel watch ncdu vim tmux fzf ripgrep jq universal-ctags wl-clipboard
 
   if lspci | grep -E "VGA|3D" | grep -iq "AMD"; then
     echo '[-] installing amd essential packages [-]'
@@ -144,9 +145,15 @@ if [ ! -d "$target_dir" ] ; then
   git clone https://github.com/zsh-users/zsh-autosuggestions $target_dir
 fi
 
-echo '[-] downloading vim-plug script [-]'
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+target_dir=$XDG_DATA_HOME/neovim
+if [ ! -d "$target_dir" ] ; then
+  echo '[-] building neovim [-]'
+  git clone https://github.com/neovim/neovim.git $target_dir
+  cd $target_dir
+  git checkout nightly
+  make CMAKE_BUILD_TYPE=RelWithDebInfo
+  sudo make install
+fi
 
 current_shell=$(echo $SHELL)
 if [ "$current_shell" != '/usr/bin/zsh' ] && [ "$current_shell" != '/bin/zsh' ]; then

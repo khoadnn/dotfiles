@@ -29,5 +29,7 @@ setopt PROMPT_SUBST
 PS1='%B%F{magenta}%0~%f%b% %F{blue}$(__git_ps1 " [%s]") %f%(?..%F{red})%(!.#.$)%f%b '
 # activate autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+# nvim as vim on local
+alias vim=nvim
 # source .profile
 source $HOME/.profile

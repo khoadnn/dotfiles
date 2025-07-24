@@ -7,6 +7,6 @@ fi
 name=$(basename "$dir")
 if ! tmux has-session -t $name 2>/dev/null; then
   tmux new-session -s $name -d -c $dir
-  tmux send-keys -t $name 'vim .' C-m
+  tmux send-keys -t $name 'nvim .' C-m
 fi
 tmux switch -t $name

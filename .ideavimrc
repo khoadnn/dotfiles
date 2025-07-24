@@ -12,6 +12,10 @@ set ideawrite=file
 set visualdelay=50
 set ideajoin
 set ideamarks
+" enable IdeaVim plugins https://jb.gg/ideavim-plugins
+set highlightedyank
+set commentary
+set surround
 " map IDE Actions to IdeaVim -- https://jb.gg/abva4t
 " find files and grep patterns
 nmap <Space>f <Action>(GotoFile)
@@ -26,14 +30,14 @@ nmap <Space>/ <Action>(SearchEverywhere)
 nmap gq <Action>(ReformatCode)
 vmap gq <Action>(ReformatCode)
 nmap <C-]> <Action>(GotoDeclaration)
-nmap <C-t> <Action>(Back)
+nmap <C-[> <Action>(Back)
 nmap gi <Action>(GotoImplementation)
 nmap gr <Action>(FindUsages)
-nmap ga <Action>(GotoAction)
 nmap K <Action>(ShowHoverInfo)
+nmap <Space>a <Action>(GotoAction)
 " IDE actions
-nmap gx <Action>(RunClass)
-nmap gX <Action>(RunMenu)
+nmap <Space>xc <Action>(RunClass)
+nmap <Space>xm <Action>(RunMenu)
 nmap - <Action>(SelectInProjectView)
 nmap <C-n> <Action>(GotoNextError)zz
 nmap <C-p> <Action>(GotoPreviousError)zz
